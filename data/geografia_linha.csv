@@ -1,0 +1,7 @@
+id_secao,cidade_referencia,estado,tipo_geometria,raio_curva_metros
+SEC_01,Juiz de Fora,MG,Curva Acentuada,300.0
+SEC_02,Brumadinho,MG,Curva Leve,800.0
+SEC_03,Santos,SP,Reta,
+SEC_04,Barra do Piraí,RJ,Declive / Serra,400.0
+SEC_05,Cubatão,SP,Reta,
+SEC_06,Itaguaí,RJ,Curva Acentuada,250.0
