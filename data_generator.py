@@ -158,7 +158,7 @@ df_trilhos = pd.DataFrame(inspecao_data, columns=[
 # ==========================================
 # Exportação
 # ==========================================
-df_telemetria.to_csv('automl.csv', index=False)
+df_telemetria.to_csv('telemetria.csv', index=False)
 df_paradas.to_csv('paradas.csv', index=False)
 df_trilhos.to_csv('monitoramento_trilhos.csv', index=False)
 df_geografia.to_csv('geografia_linha.csv', index=False)
