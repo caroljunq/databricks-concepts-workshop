@@ -46,7 +46,7 @@ elif menu == "Genie":
     st.header("🤖 Genie: IA para consulta dos dados")
     st.markdown("Pergunte o que quiser sobre o dataset de inadimplência e obtenha insights em linguagem natural!")
 
-    genie_space_id = "<<ID GENIE SPACE AQUI>>""
+    genie_space_id = "<<ID GENIE SPACE AQUI>>"
     workspace_client = WorkspaceClient()
     genie_api = GenieAPI(workspace_client.api_client)
     conversation_id = st.session_state.get("genie_conversation_id", None)
