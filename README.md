@@ -2,40 +2,6 @@
 databricks-concepts-workshop
 
 # Descrição dos dados
-```python
-import pandas as pd
-
-files = [
-    'automl.csv', 
-    'frota_locomotivas.csv', 
-    'geografia_linha.csv', 
-    'monitoramento_trilhos.csv', 
-    'paradas.csv', 
-    'telemetria.csv'
-]
-
-data_info = {}
-
-for file in files:
-    try:
-        df = pd.read_csv(file)
-        # Store column names and types
-        cols = []
-        for col, dtype in df.dtypes.items():
-            cols.append((col, str(dtype)))
-        
-        data_info[file] = {
-            "columns": cols,
-            "head": df.head(2).to_dict(orient='records'),
-            "rows": len(df)
-        }
-    except Exception as e:
-        data_info[file] = f"Error: {e}"
-
-print(data_info)
-
-
-```
 
 Aqui está o schema detalhado e o resumo de cada tabela disponível nos seus dados.
 
