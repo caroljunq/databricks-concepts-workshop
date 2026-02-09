@@ -1,0 +1,1291 @@
+{
+  "datasets": [
+    {
+      "name": "e2d01a8b",
+      "displayName": "frota_locomotivas",
+      "queryLines": [
+        "SELECT * FROM workshop_rails.rails.frota_locomotivas"
+      ]
+    },
+    {
+      "name": "af1a05e0",
+      "displayName": "geografia_linha",
+      "queryLines": [
+        "SELECT * FROM workshop_rails.rails.geografia_linha"
+      ]
+    },
+    {
+      "name": "329276dc",
+      "displayName": "monitoramento_trilhos",
+      "queryLines": [
+        "SELECT * FROM workshop_rails.rails.monitoramento_trilhos"
+      ]
+    },
+    {
+      "name": "8b941e00",
+      "displayName": "paradas",
+      "queryLines": [
+        "SELECT * FROM workshop_rails.rails.paradas"
+      ]
+    },
+    {
+      "name": "4b5e1699",
+      "displayName": "telemetria",
+      "queryLines": [
+        "SELECT * FROM workshop_rails.rails.telemetria"
+      ]
+    },
+    {
+      "name": "c73fdc20",
+      "displayName": "stops_with_geography",
+      "queryLines": [
+        "SELECT p.*, g.estado, g.cidade_referencia, g.tipo_geometria \n",
+        "FROM workshop_rails.rails.paradas p \n",
+        "LEFT JOIN workshop_rails.rails.geografia_linha g ON p.id_secao = g.id_secao"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "rail_stops",
+      "displayName": "Rail Stops",
+      "layout": [
+        {
+          "widget": {
+            "name": "total_stops",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8b941e00",
+                  "fields": [
+                    {
+                      "name": "count(id_evento)",
+                      "expression": "COUNT(`id_evento`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Stops",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(id_evento)",
+                  "displayName": "Total"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_stop_duration",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8b941e00",
+                  "fields": [
+                    {
+                      "name": "avg(duracao_minutos)",
+                      "expression": "AVG(`duracao_minutos`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Stop Duration (min)",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(duracao_minutos)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Average"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "total_maintenance_cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "sum(custo_manutencao_corretiva_brl)",
+                      "expression": "SUM(`custo_manutencao_corretiva_brl`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Maintenance Cost (BRL)",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(custo_manutencao_corretiva_brl)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Total"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "stops_by_reason",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8b941e00",
+                  "fields": [
+                    {
+                      "name": "count(id_evento)",
+                      "expression": "COUNT(`id_evento`)"
+                    },
+                    {
+                      "name": "motivo_parada",
+                      "expression": "`motivo_parada`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Stops by Reason",
+                "showTitle": true
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "count(id_evento)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "motivo_parada",
+                  "displayName": "Reason",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "stops_by_state",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c73fdc20",
+                  "fields": [
+                    {
+                      "name": "estado",
+                      "expression": "`estado`"
+                    },
+                    {
+                      "name": "count(id_evento)",
+                      "expression": "COUNT(`id_evento`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Stops by State",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "estado",
+                  "displayName": "State",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "count(id_evento)",
+                  "displayName": "Total Stops",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "estado",
+                  "displayName": "State",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "stops_by_geometry",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c73fdc20",
+                  "fields": [
+                    {
+                      "name": "tipo_geometria",
+                      "expression": "`tipo_geometria`"
+                    },
+                    {
+                      "name": "count(id_evento)",
+                      "expression": "COUNT(`id_evento`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Stops by Track Geometry",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tipo_geometria",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "count(id_evento)",
+                  "displayName": "Count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "tipo_geometria",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "maintenance_cost_by_section",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "id_secao",
+                      "expression": "`id_secao`"
+                    },
+                    {
+                      "name": "sum(custo_manutencao_corretiva_brl)",
+                      "expression": "SUM(`custo_manutencao_corretiva_brl`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Maintenance Cost by Section",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "id_secao",
+                  "displayName": "Section",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(custo_manutencao_corretiva_brl)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Cost (BRL)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "id_secao",
+                  "displayName": "Section",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 12,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "recent_stops_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8b941e00",
+                  "fields": [
+                    {
+                      "name": "id_evento",
+                      "expression": "`id_evento`"
+                    },
+                    {
+                      "name": "id_locomotiva",
+                      "expression": "`id_locomotiva`"
+                    },
+                    {
+                      "name": "data_evento",
+                      "expression": "`data_evento`"
+                    },
+                    {
+                      "name": "motivo_parada",
+                      "expression": "`motivo_parada`"
+                    },
+                    {
+                      "name": "duracao_minutos",
+                      "expression": "`duracao_minutos`"
+                    },
+                    {
+                      "name": "custo_estimado_perda_brl",
+                      "expression": "`custo_estimado_perda_brl`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "frame": {
+                "title": "Recent Stops",
+                "showTitle": true
+              },
+              "itemsPerPage": 25,
+              "condensed": true,
+              "allowHTMLByDefault": false,
+              "invisibleColumns": [],
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "id_evento",
+                    "title": "Event ID",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Event ID"
+                  },
+                  {
+                    "fieldName": "id_locomotiva",
+                    "title": "Locomotive",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Locomotive"
+                  },
+                  {
+                    "fieldName": "data_evento",
+                    "title": "Date",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Date"
+                  },
+                  {
+                    "fieldName": "motivo_parada",
+                    "title": "Reason",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Reason"
+                  },
+                  {
+                    "fieldName": "duracao_minutos",
+                    "title": "Duration (min)",
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "numberFormat": "0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Duration (min)"
+                  },
+                  {
+                    "fieldName": "custo_estimado_perda_brl",
+                    "title": "Cost (BRL)",
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Cost (BRL)"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 6,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "track_telemetry",
+      "displayName": "Track & Telemetry Analysis",
+      "layout": [
+        {
+          "widget": {
+            "name": "total_inspections",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "count(id_inspecao)",
+                      "expression": "COUNT(`id_inspecao`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Track Inspections",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(id_inspecao)",
+                  "displayName": "Total"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_top_friction",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "avg(atrito_topo_trilho)",
+                      "expression": "AVG(`atrito_topo_trilho`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Top Friction",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(atrito_topo_trilho)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Average"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_lateral_friction",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "avg(atrito_lateral_flange)",
+                      "expression": "AVG(`atrito_lateral_flange`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Lateral Friction",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(atrito_lateral_flange)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Average"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "friction_scatter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "tipo_geometria_snapshot",
+                      "expression": "`tipo_geometria_snapshot`"
+                    },
+                    {
+                      "name": "atrito_topo_trilho",
+                      "expression": "`atrito_topo_trilho`"
+                    },
+                    {
+                      "name": "atrito_lateral_flange",
+                      "expression": "`atrito_lateral_flange`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Track Friction Correlation",
+                "showTitle": true
+              },
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "atrito_topo_trilho",
+                  "displayName": "Top Friction",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "atrito_lateral_flange",
+                  "displayName": "Lateral Friction",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 3,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_top_friction_by_geometry",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "tipo_geometria_snapshot",
+                      "expression": "`tipo_geometria_snapshot`"
+                    },
+                    {
+                      "name": "avg(atrito_topo_trilho)",
+                      "expression": "AVG(`atrito_topo_trilho`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Avg Top Friction by Geometry",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(atrito_topo_trilho)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Avg Friction",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 3,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_lateral_friction_by_geometry",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "tipo_geometria_snapshot",
+                      "expression": "`tipo_geometria_snapshot`"
+                    },
+                    {
+                      "name": "avg(atrito_lateral_flange)",
+                      "expression": "AVG(`atrito_lateral_flange`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Avg Lateral Friction by Geometry",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(atrito_lateral_flange)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Avg Friction",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "maintenance_cost_by_geometry",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "tipo_geometria_snapshot",
+                      "expression": "`tipo_geometria_snapshot`"
+                    },
+                    {
+                      "name": "sum(custo_manutencao_corretiva_brl)",
+                      "expression": "SUM(`custo_manutencao_corretiva_brl`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Maintenance Cost by Geometry Type",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(custo_manutencao_corretiva_brl)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Total Cost (BRL)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "tipo_geometria_snapshot",
+                  "displayName": "Geometry",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 14,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "inspections_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "329276dc",
+                  "fields": [
+                    {
+                      "name": "id_inspecao",
+                      "expression": "`id_inspecao`"
+                    },
+                    {
+                      "name": "id_secao",
+                      "expression": "`id_secao`"
+                    },
+                    {
+                      "name": "data_inspecao",
+                      "expression": "`data_inspecao`"
+                    },
+                    {
+                      "name": "tipo_geometria_snapshot",
+                      "expression": "`tipo_geometria_snapshot`"
+                    },
+                    {
+                      "name": "atrito_topo_trilho",
+                      "expression": "`atrito_topo_trilho`"
+                    },
+                    {
+                      "name": "atrito_lateral_flange",
+                      "expression": "`atrito_lateral_flange`"
+                    },
+                    {
+                      "name": "custo_manutencao_corretiva_brl",
+                      "expression": "`custo_manutencao_corretiva_brl`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "frame": {
+                "title": "Track Inspection Details",
+                "showTitle": true
+              },
+              "itemsPerPage": 25,
+              "condensed": true,
+              "allowHTMLByDefault": false,
+              "invisibleColumns": [],
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "id_inspecao",
+                    "title": "Inspection ID",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Inspection ID"
+                  },
+                  {
+                    "fieldName": "id_secao",
+                    "title": "Section",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Section"
+                  },
+                  {
+                    "fieldName": "data_inspecao",
+                    "title": "Date",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Date"
+                  },
+                  {
+                    "fieldName": "tipo_geometria_snapshot",
+                    "title": "Geometry",
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Geometry"
+                  },
+                  {
+                    "fieldName": "atrito_topo_trilho",
+                    "title": "Top Friction",
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Top Friction"
+                  },
+                  {
+                    "fieldName": "atrito_lateral_flange",
+                    "title": "Lateral Friction",
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Lateral Friction"
+                  },
+                  {
+                    "fieldName": "custo_manutencao_corretiva_brl",
+                    "title": "Maintenance Cost (BRL)",
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "displayName": "Maintenance Cost (BRL)"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 22,
+            "width": 6,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
